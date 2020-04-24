@@ -38,41 +38,48 @@ const SignUp: React.FC = () => {
   const passwordInputRef = useRef<TextInput>(null);
   const navigation = useNavigation();
 
-  const handleSignUp = useCallback(async (data: SignUpFormData) => {
-    try {
-      formRef.current?.setErrors({}); // eslint-disable-line no-unused-expressions
+  const handleSignUp = useCallback(
+    async (data: SignUpFormData) => {
+      try {
+        formRef.current?.setErrors({}); // eslint-disable-line no-unused-expressions
 
-      const schema = Yup.object().shape({
-        name: Yup.string().required('Name is required'),
-        email: Yup.string()
-          .required('Email is required')
-          .email('Type a valid email'),
-        password: Yup.string().min(6, 'At least 6 characters'),
-      });
+        const schema = Yup.object().shape({
+          name: Yup.string().required('Name is required'),
+          email: Yup.string()
+            .required('Email is required')
+            .email('Type a valid email'),
+          password: Yup.string().min(6, 'At least 6 characters'),
+        });
 
-      await schema.validate(data, {
-        abortEarly: false,
-      });
+        await schema.validate(data, {
+          abortEarly: false,
+        });
 
-      await api.post('users', data);
+        await api.post('users', data);
 
-      Alert.alert('Account created!', 'You can now log in to the GoBarber App');
-      navigation.goBack();
-    } catch (err) {
-      if (err instanceof Yup.ValidationError) {
-        const errors = getValidationErrors(err);
-        formRef.current?.setErrors(errors); // eslint-disable-line no-unused-expressions
+        Alert.alert(
+          'Account created!',
+          'You can now log in to the GoBarber App',
+        );
 
-        return;
+        navigation.goBack();
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(err);
+          formRef.current?.setErrors(errors); // eslint-disable-line no-unused-expressions
+
+          return;
+        }
+
+        // trigger a toast for a more generic error
+        Alert.alert(
+          'Account creation error',
+          'An error has occurred when creating account. Try again.',
+        );
       }
-
-      // trigger a toast for a more generic error
-      Alert.alert(
-        'Account creation error',
-        'An error has occurred when creating account. Try again.',
-      );
-    }
-  }, []);
+    },
+    [navigation],
+  );
 
   return (
     <>
