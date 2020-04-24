@@ -6,8 +6,10 @@ import {
   KeyboardAvoidingView,
   Platform,
   TextInput,
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+import * as Yup from 'yup';
 
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
@@ -28,13 +30,50 @@ import {
 
 import logoImg from '../../assets/logo.png';
 
+import getValidationErrors from '../../utils/getValidationErrors';
+
+interface SignInFormData {
+  email: string;
+  password: string;
+}
+
 const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const passwordInputRef = useRef<TextInput>(null);
   const navigation = useNavigation();
 
-  const handleSignIn = useCallback(data => {
-    console.log(data);
+  const handleSignIn = useCallback(async (data: SignInFormData) => {
+    try {
+      formRef.current?.setErrors({}); // eslint-disable-line no-unused-expressions
+
+      const schema = Yup.object().shape({
+        email: Yup.string()
+          .required('Email is required')
+          .email('Type a valid email'),
+        password: Yup.string().required('Password is required'),
+      });
+
+      await schema.validate(data, {
+        abortEarly: false,
+      });
+
+      // await signIn({ email: data.email, password: data.password });
+
+      // history.push('/dashboard');
+    } catch (err) {
+      if (err instanceof Yup.ValidationError) {
+        const errors = getValidationErrors(err);
+        formRef.current?.setErrors(errors); // eslint-disable-line no-unused-expressions
+
+        return;
+      }
+
+      // trigger a toast for a more generic error
+      Alert.alert(
+        'Authentication error',
+        'An error has occurred while performing login. Check your credentials.',
+      );
+    }
   }, []);
 
   return (

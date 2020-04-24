@@ -14,8 +14,8 @@ This will consume the API created at [this repository](https://github.com/psatle
 - Styled Components
 - [React Navigation v5](https://reactnavigation.org/)
 - Unform/core and Unform/mobile
+- Yup (for handling errors)
 <!-- - Axios
 - Polished
-- Yup (for handling errors)
 - React Spring -->
 
