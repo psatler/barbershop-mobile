@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import {
   View,
   Image,
@@ -7,6 +7,9 @@ import {
   Platform,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+
+import { Form } from '@unform/mobile';
+import { FormHandles } from '@unform/core';
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -25,7 +28,12 @@ import {
 import logoImg from '../../assets/logo.png';
 
 const SignIn: React.FC = () => {
+  const formRef = useRef<FormHandles>(null);
   const navigation = useNavigation();
+
+  const handleSignIn = useCallback(data => {
+    console.log(data);
+  }, []);
 
   return (
     <>
@@ -35,7 +43,9 @@ const SignIn: React.FC = () => {
         enabled
       >
         <ScrollView
-          // contentContainerStyle={{ flex: 1 }}
+          style={{ flex: 1 }}
+          alwaysBounceVertical={false}
+          contentContainerStyle={{ flexGrow: 1 }}
           keyboardShouldPersistTaps="handled"
         >
           <Container>
@@ -44,16 +54,18 @@ const SignIn: React.FC = () => {
               <Title>Sign In</Title>
             </View>
 
-            <Input name="email" icon="mail" placeholder="E-mail" />
-            <Input name="password" icon="lock" placeholder="Password" />
+            <Form ref={formRef} onSubmit={handleSignIn}>
+              <Input name="email" icon="mail" placeholder="E-mail" />
+              <Input name="password" icon="lock" placeholder="Password" />
 
-            <Button
-              onPress={() => {
-                console.log('eh nois');
-              }}
-            >
-              Log in
-            </Button>
+              <Button
+                onPress={() => {
+                  formRef.current?.submitForm(); // eslint-disable-line no-unused-expressions
+                }}
+              >
+                Log in
+              </Button>
+            </Form>
 
             <ForgotPassword onPress={() => {}}>
               <ForgotPasswordText>Forgot password</ForgotPasswordText>
