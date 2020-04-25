@@ -15,6 +15,7 @@ This will consume the API created at [this repository](https://github.com/psatle
 - [React Navigation v5](https://reactnavigation.org/)
 - Unform/core and Unform/mobile
 - Yup (for handling errors)
+- React Native Async Storage
 <!-- - Axios
 - Polished
 - React Spring -->
