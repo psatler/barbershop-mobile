@@ -23,12 +23,14 @@ interface AuthContextData {
   user: object;
   signIn: (credentials: SignInCredentials) => Promise<void>;
   signOut: () => void;
+  loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 const AuthProvider: React.FC = ({ children }) => {
   const [data, setData] = useState<AuthState>({} as AuthState);
+  const [loading, setLoading] = useState(true);
 
   // we're gonna set the initial state via the useEffect
   useEffect(() => {
@@ -44,6 +46,8 @@ const AuthProvider: React.FC = ({ children }) => {
           user: JSON.parse(user[1]),
         });
       }
+
+      setLoading(false);
     }
 
     loadStorageData();
@@ -76,6 +80,7 @@ const AuthProvider: React.FC = ({ children }) => {
         user: data.user,
         signIn,
         signOut,
+        loading,
       }}
     >
       {children}
@@ -85,12 +90,12 @@ const AuthProvider: React.FC = ({ children }) => {
 
 function useAuth(): AuthContextData {
   const context = useContext(AuthContext);
-  console.log('useAuth context', isEmpty(context));
-  // if component using this it is inside AuthContext.Provider (which is the AuthProvider component above)
 
   // if (!context) {
   //   throw new Error('useAuth must be used within a AuthProvider');
   // }
+
+  // if component using this it is inside AuthContext.Provider (which is the AuthProvider component above)
   if (isEmpty(context)) {
     throw new Error('useAuth must be used within a AuthProvider');
   }
