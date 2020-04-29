@@ -12,6 +12,8 @@ import { useField } from '@unform/core';
 
 import { Container, TextInput, Icon } from './styles';
 
+import { normalize } from '../../utils/responsive';
+
 interface InputProps extends TextInputProps {
   name: string; // making it mandatory because we'll use it for the Unform lib
   icon: string;

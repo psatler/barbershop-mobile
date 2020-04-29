@@ -1,30 +1,32 @@
 import styled from 'styled-components/native';
 import { getBottomSpace } from 'react-native-iphone-x-helper';
 
+import { normalize } from '../../utils/responsive';
+
 export const Container = styled.View`
   flex: 1;
   align-items: center;
   justify-content: center;
 
-  padding: 0 30px 100px;
+  padding: 0 ${normalize(30)}px ${normalize(100, 'height')}px;
 `;
 
 export const Title = styled.Text`
-  font-size: 24px;
+  font-size: ${normalize(24)}px;
   color: #f4ede8;
   font-family: 'RobotoSlab-Medium';
 
   /* 64px top, 0px at the sides, 24px at the bottom  */
-  margin: 64px 0 24px;
+  margin: ${normalize(64, 'height')}px 0 ${normalize(24, 'height')}px;
 `;
 
 export const ForgotPassword = styled.TouchableOpacity`
-  margin-top: 24px;
+  margin-top: ${normalize(24)}px;
 `;
 
 export const ForgotPasswordText = styled.Text`
   color: #f4ede8;
-  font-size: 16px;
+  font-size: ${normalize(16)}px;
   font-family: 'RobotoSlab-Regular';
 `;
 
@@ -36,7 +38,7 @@ export const CreateAccountButton = styled.TouchableOpacity`
   background: #312e38;
   border-top-width: 1px;
   border-color: #232129;
-  padding: 16px 0 ${16 + getBottomSpace()}px;
+  padding: ${normalize(16, 'height')}px 0 ${normalize(16) + getBottomSpace()}px;
 
   justify-content: center;
   align-items: center;
@@ -45,7 +47,7 @@ export const CreateAccountButton = styled.TouchableOpacity`
 
 export const CreateAccountButtonText = styled.Text`
   color: #ff9000;
-  font-size: 18px;
+  font-size: ${normalize(18)}px;
   font-family: 'RobotoSlab-Regular';
-  margin-left: 16px;
+  margin-left: ${normalize(16)}px;
 `;
