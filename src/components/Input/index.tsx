@@ -6,7 +6,7 @@ import React, {
   forwardRef,
   useCallback,
 } from 'react';
-import { TextInputProps } from 'react-native';
+import { TextInputProps, Animated } from 'react-native';
 
 import { useField } from '@unform/core';
 
@@ -69,25 +69,55 @@ const Input: React.RefForwardingComponent<InputRef, InputProps> = (
     });
   }, [fieldName, registerField]);
 
+  // animation to wiggle input when there is an error
+  const wiggleAnim = useRef(new Animated.Value(0)).current;
+
+  const shakeButton = useCallback(() => {
+    wiggleAnim.setValue(0); // resetting first
+    Animated.timing(wiggleAnim, {
+      duration: 400, // 400ms
+      toValue: 3, // because our animation ends at 3
+      useNativeDriver: true,
+    }).start();
+  }, [wiggleAnim]);
+
+  const interpolated = wiggleAnim.interpolate({
+    inputRange: [0, 0.5, 1, 1.5, 2, 2.5, 3], // from 0 to 3
+    outputRange: [0, -20, 0, 20, 0, -20, 0], // output of the translateX
+  });
+
+  useEffect(() => {
+    if (error !== undefined) {
+      shakeButton();
+    }
+  }, [error, shakeButton]);
+
   return (
-    <Container isFocused={isFocused} isErrored={Boolean(error)}>
-      <Icon
-        name={icon}
-        size={20}
-        color={isFocused || isFilled ? '#ff9000' : '#666360'}
-      />
-      <TextInput
-        {...rest}
-        ref={inputElementRef}
-        keyboardAppearance="dark"
-        placeholderTextColor="#666360"
-        onChangeText={(value): void => {
-          inputValueRef.current.value = value;
-        }}
-        onFocus={handleInputFocus}
-        onBlur={handleInputBlur}
-      />
-    </Container>
+    <Animated.View
+      style={{
+        transform: [{ translateX: interpolated }],
+      }}
+    >
+      <Container isFocused={isFocused} isErrored={Boolean(error)}>
+        <Icon
+          name={icon}
+          size={20}
+          color={isFocused || isFilled ? '#ff9000' : '#666360'}
+        />
+
+        <TextInput
+          {...rest}
+          ref={inputElementRef}
+          keyboardAppearance="dark"
+          placeholderTextColor="#666360"
+          onChangeText={(value): void => {
+            inputValueRef.current.value = value;
+          }}
+          onFocus={handleInputFocus}
+          onBlur={handleInputBlur}
+        />
+      </Container>
+    </Animated.View>
   );
 };
 
