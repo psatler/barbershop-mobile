@@ -13,31 +13,6 @@ import AppRoutes from './app.routes';
 
 import { useAuth } from '../hooks/auth';
 
-// ############
-// const useMount = func => useEffect(() => func(), []);
-
-// const useInitialURL = () => {
-//   const [url, setUrl] = useState(null);
-//   const [processing, setProcessing] = useState(true);
-
-//   useMount(() => {
-//     const getUrlAsync = async () => {
-//       // Get the deep link used to open the app
-//       const initialUrl = await Linking.getInitialURL();
-
-//       // The setTimeout is just for testing purpose
-//       setTimeout(() => {
-//         setUrl(initialUrl);
-//         setProcessing(false);
-//       }, 1000);
-//     };
-
-//     getUrlAsync();
-//   });
-
-//   return { url, processing };
-// };
-
 // https://medium.com/react-native-training/deep-linking-your-react-native-app-d87c39a1ad5e
 const Routes: React.FC = () => {
   const { user, loading } = useAuth();
