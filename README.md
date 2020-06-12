@@ -40,3 +40,10 @@ This will consume the API created at [this repository](https://github.com/psatle
 - Polished
 - React Spring -->
 
+
+
+### Acknowledments
+
+- You can run `adb reverse tcp:3333 tcp:3333` to be able to fetch the api using _localhost_. Another adjust you can do it to find your IP local address, for example,
+`192.168.15.17` and replace it on the [backend](https://github.com/psatler/barbershop-backend) at the variable _APP_API_URL_ in the `.env` file, so it becomes
+`http://192.168.15.17:3333`. **Remember**: you got to be using the same network to perform requests on localhost.

@@ -61,6 +61,8 @@ const SignIn: React.FC = () => {
           abortEarly: false,
         });
 
+        console.log(data);
+
         await signIn({
           email: data.email,
           password: data.password,
@@ -74,6 +76,8 @@ const SignIn: React.FC = () => {
 
           return;
         }
+
+        console.log(err);
 
         // trigger a toast for a more generic error
         Alert.alert(

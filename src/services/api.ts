@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://192.168.15.7:3333',
+  baseURL: 'http://192.168.15.17:3333',
 });
 
 // command to know the ip addresses tested on Ubuntu 18.04
