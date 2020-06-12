@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import Icon from 'react-native-vector-icons/Feather';
 
 import { useNavigation } from '@react-navigation/native';
 import { AxiosError } from 'axios';
@@ -13,6 +14,13 @@ import {
   ProfileButton,
   UserAvatar,
   ProvidersList,
+  ProviderContainer,
+  ProviderAvatar,
+  ProviderInfo,
+  ProviderName,
+  ProviderMeta,
+  ProviderMetaText,
+  ProvidersListTitle,
 } from './styles';
 
 export interface Provider {
@@ -32,6 +40,13 @@ const Dashboard: React.FC = () => {
     signOut();
   }, [signOut]);
 
+  const navigateToCreateAppointment = useCallback(
+    (providerId: string) => {
+      navigate('CreateAppointment', { providerId });
+    },
+    [navigate],
+  );
+
   useEffect(() => {
     api
       .get('providers')
@@ -49,7 +64,7 @@ const Dashboard: React.FC = () => {
     <Container>
       <Header>
         <HeaderTitle>
-          Welcome, {'\n'}
+          Bem vindo, {'\n'}
           <UserName>{user.name}</UserName>
         </HeaderTitle>
 
@@ -61,7 +76,30 @@ const Dashboard: React.FC = () => {
       <ProvidersList
         data={providers}
         keyExtractor={provider => provider.id}
-        renderItem={({ item }) => <UserName>{item.name}</UserName>}
+        ListHeaderComponent={
+          <ProvidersListTitle>Cabeleleiros</ProvidersListTitle>
+        }
+        renderItem={({ item: provider }) => (
+          <ProviderContainer
+            onPress={() => navigateToCreateAppointment(provider.id)}
+          >
+            <ProviderAvatar source={{ uri: provider.avatar_url }} />
+
+            <ProviderInfo>
+              <ProviderName> {provider.name} </ProviderName>
+
+              <ProviderMeta>
+                <Icon name="calendar" size={14} color="#ff9000" />
+                <ProviderMetaText>Segunda à sexta</ProviderMetaText>
+              </ProviderMeta>
+
+              <ProviderMeta>
+                <Icon name="clock" size={14} color="#ff9000" />
+                <ProviderMetaText>8h às 18h </ProviderMetaText>
+              </ProviderMeta>
+            </ProviderInfo>
+          </ProviderContainer>
+        )}
       />
     </Container>
   );
