@@ -35,6 +35,11 @@ export interface Provider {
   avatar_url: string;
 }
 
+interface AvailabilityItem {
+  hour: number;
+  available: boolean;
+}
+
 const CreateAppointment: React.FC = () => {
   const { user } = useAuth();
   const route = useRoute();
@@ -49,6 +54,10 @@ const CreateAppointment: React.FC = () => {
 
   const [showDatePicker, setShowDatePicker] = useState(false); // for not showing the DatePicker right away on Android
   const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const [dayAvailability, setDayAvailability] = useState<AvailabilityItem[]>(
+    [],
+  );
 
   const navigateBack = useCallback(() => {
     goBack();
@@ -87,6 +96,32 @@ const CreateAppointment: React.FC = () => {
         console.log(err.message);
       });
   }, []);
+
+  useEffect(() => {
+    async function getDayAvailability(): Promise<void> {
+      try {
+        const response = await api.get(
+          `providers/${selectedProvider}/day-availability`,
+          {
+            params: {
+              year: selectedDate.getFullYear(),
+              month: selectedDate.getMonth() + 1,
+              day: selectedDate.getDate(),
+            },
+          },
+        );
+
+        setDayAvailability(response.data);
+
+        console.log('getDayAvailability');
+        console.log(response.data);
+      } catch (error) {
+        console.log('getDayAvailability error');
+      }
+    }
+
+    getDayAvailability();
+  }, [selectedDate, selectedProvider]);
 
   return (
     <Container>
