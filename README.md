@@ -38,6 +38,7 @@ This will consume the API created at [this repository](https://github.com/psatle
 - [Lint-staged](https://github.com/okonet/lint-staged) and [Husky](https://github.com/typicode/husky) for pre-commit checks
 - [React Native Date Time Picker](https://github.com/react-native-community/datetimepicker) for selecting dates.
 - [Date-fns](https://github.com/date-fns/date-fns): Modern JavaScript date utility library
+- [React Native Image Picker](https://github.com/react-native-community/react-native-image-picker): A React Native module that allows you to use native UI to select media from the device library or directly from the camera.
 <!-- -
 - Polished
 - React Spring -->

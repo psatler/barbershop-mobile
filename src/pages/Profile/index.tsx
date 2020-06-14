@@ -8,12 +8,14 @@ import {
   Alert,
 } from 'react-native';
 import * as Yup from 'yup';
+import ImagePicker from 'react-native-image-picker';
 
 import { useNavigation } from '@react-navigation/native';
 
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
 import Icon from 'react-native-vector-icons/Feather';
+import { AxiosError } from 'axios';
 import { useAuth } from '../../hooks/auth';
 
 import api from '../../services/api';
@@ -122,8 +124,55 @@ const Profile: React.FC = () => {
         );
       }
     },
-    [navigation],
+    [navigation, updateUser],
   );
+
+  const handleUpdateAvatar = useCallback(() => {
+    ImagePicker.showImagePicker(
+      {
+        title: 'Selecione um avatar',
+        cancelButtonTitle: 'Cancelar',
+        takePhotoButtonTitle: 'Usar câmera',
+        chooseFromLibraryButtonTitle: 'Escolha da galeria',
+      },
+      response => {
+        // console.log('Response = ', response);
+
+        if (response.didCancel) {
+          console.log('User cancelled image picker');
+          return;
+        }
+
+        if (response.error) {
+          Alert.alert(
+            'Error ao atualizar seu avatar',
+            `ImagePicker Error: ${response.error}`,
+          );
+        }
+
+        // if (response.customButton) {
+        //   console.log('User tapped custom button: ', response.customButton);
+        // }
+
+        const data = new FormData();
+        data.append('avatar', {
+          type: 'image/jpeg',
+          name: `${user.id}.jpg`,
+          uri: response.uri,
+        });
+
+        api
+          .patch('users/avatar', data)
+          .then(apiResponse => {
+            updateUser(apiResponse.data);
+          })
+          .catch((err: AxiosError) => {
+            console.log(err.response?.statusText);
+            console.log(err.message);
+          });
+      },
+    );
+  }, [user.id, updateUser]);
 
   const handleGoBack = useCallback(() => {
     navigation.goBack();
@@ -147,7 +196,7 @@ const Profile: React.FC = () => {
               <Icon name="chevron-left" size={24} color="#999591" />
             </BackButton>
 
-            <UserAvatarButton>
+            <UserAvatarButton onPress={handleUpdateAvatar}>
               <UserAvatar source={{ uri: user.avatar_url }} />
             </UserAvatarButton>
 
