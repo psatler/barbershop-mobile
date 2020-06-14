@@ -37,6 +37,7 @@ This will consume the API created at [this repository](https://github.com/psatle
 - React Native Async Storage
 - [Lint-staged](https://github.com/okonet/lint-staged) and [Husky](https://github.com/typicode/husky) for pre-commit checks
 - [React Native Date Time Picker](https://github.com/react-native-community/datetimepicker) for selecting dates.
+- [Date-fns](https://github.com/date-fns/date-fns): Modern JavaScript date utility library
 <!-- -
 - Polished
 - React Spring -->
