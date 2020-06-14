@@ -30,14 +30,19 @@ import {
   BackButton,
 } from './styles';
 
-interface SignUpFormData {
+interface ProfileFormData {
   name: string;
   email: string;
+  old_password: string;
   password: string;
+  password_confirmation: string;
 }
 
-const SignUp: React.FC = () => {
-  const { user } = useAuth();
+const Profile: React.FC = () => {
+  const { user, updateUser } = useAuth();
+
+  console.log(user.name);
+  console.log(user.email);
 
   const formRef = useRef<FormHandles>(null);
   const emailRef = useRef<TextInput>(null);
@@ -46,8 +51,8 @@ const SignUp: React.FC = () => {
   const confirmPasswordInputRef = useRef<TextInput>(null);
   const navigation = useNavigation();
 
-  const handleSignUp = useCallback(
-    async (data: SignUpFormData) => {
+  const handleUpdateProfile = useCallback(
+    async (data: ProfileFormData) => {
       try {
         formRef.current?.setErrors({}); // eslint-disable-line no-unused-expressions
 
@@ -56,19 +61,50 @@ const SignUp: React.FC = () => {
           email: Yup.string()
             .required('Email is required')
             .email('Type a valid email'),
-          password: Yup.string().min(6, 'At least 6 characters'),
+          old_password: Yup.string(),
+          password: Yup.string().when('old_password', {
+            is: val => !!val.length,
+            then: Yup.string().required('Field is required'),
+            otherwise: Yup.string(),
+          }),
+          password_confirmation: Yup.string()
+            .when('old_password', {
+              is: val => !!val.length,
+              then: Yup.string().required('Field is required'),
+              otherwise: Yup.string(),
+            })
+            .oneOf([Yup.ref('password'), null], 'New passwords must match'),
         });
 
         await schema.validate(data, {
           abortEarly: false,
         });
 
-        await api.post('users', data);
+        // handling when the user does not provide any new password, only updating name or email
+        const {
+          name,
+          email,
+          old_password,
+          password,
+          password_confirmation,
+        } = data;
+        const formData = {
+          name,
+          email,
+          ...(old_password
+            ? {
+                old_password,
+                password,
+                password_confirmation,
+              }
+            : {}),
+        };
 
-        Alert.alert(
-          'Account created!',
-          'You can now log in to the GoBarber App',
-        );
+        const response = await api.put('profile', formData);
+
+        updateUser(response.data);
+
+        Alert.alert('Perfil atualizado com sucesso!');
 
         navigation.goBack();
       } catch (err) {
@@ -81,8 +117,8 @@ const SignUp: React.FC = () => {
 
         // trigger a toast for a more generic error
         Alert.alert(
-          'Account creation error',
-          'An error has occurred when creating account. Try again.',
+          'Erro na atualização do perfil',
+          'Ocorreu um erro na atualização do perfil. Tente novamente',
         );
       }
     },
@@ -118,7 +154,14 @@ const SignUp: React.FC = () => {
             <View>
               <Title>Meu perfil</Title>
             </View>
-            <Form ref={formRef} onSubmit={handleSignUp}>
+            <Form
+              initialData={{
+                name: user.name,
+                email: user.email,
+              }}
+              ref={formRef}
+              onSubmit={handleUpdateProfile}
+            >
               <Input
                 autoCapitalize="words"
                 name="name"
@@ -191,4 +234,4 @@ const SignUp: React.FC = () => {
   );
 };
 
-export default SignUp;
+export default Profile;
