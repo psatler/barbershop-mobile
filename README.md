@@ -49,3 +49,24 @@ This will consume the API created at [this repository](https://github.com/psatle
 `192.168.15.17` and replace it on the [backend](https://github.com/psatler/barbershop-backend) at the variable _APP_API_URL_ in the `.env` file, so it becomes
 `http://192.168.15.17:3333`. **Remember**: you got to be using the same network to perform requests on localhost.
 - If you're using an Android emulator, for example, you might need to run `adb reverse tcp:8081 tcp:8081` before performing requests to the IP address you set above.
+
+###### Using Flipper for debugging
+
+With Flipper, we can view the React tree with _React DevTools_ and also check the network requests the app makes.
+
+You can download flipper from [https://fbflipper.com/](https://fbflipper.com/). On Ubuntu, for example, a `.zip` file will be downloaded. After that, you can open the application by running it, like showed [here](https://github.com/facebook/flipper/issues/1058#issuecomment-620043782).
+
+```
+cd ~/Downloads/flipper
+./flipper
+```
+You can find more info about it at the [setup page](https://fbflipper.com/docs/getting-started/react-native) in their documentation.
+
+You can install plugins, for example, for `async storage`, `redux`, etc, by going to _manage plugins_  at the bottom left, and then, going to _install plugins_, like shown below:
+
+<!-- <p align="center" style="display: flex; align-items: center; justify-content: space-around;"> -->
+<p align="center" style="display: flex; align-items: center; justify-content: space-around;">
+    <img alt="Flipper" src=".github-assets/flipper-install-plugins.png" width="660px" />
+</p>
+
+
