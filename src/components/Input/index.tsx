@@ -15,6 +15,7 @@ import { Container, TextInput, Icon } from './styles';
 interface InputProps extends TextInputProps {
   name: string; // making it mandatory because we'll use it for the Unform lib
   icon: string;
+  containerStyle?: {};
 }
 
 interface InputValueReference {
@@ -26,7 +27,7 @@ interface InputRef {
 }
 
 const Input: React.RefForwardingComponent<InputRef, InputProps> = (
-  { name, icon, ...rest },
+  { name, icon, containerStyle = {}, ...rest },
   ref,
 ) => {
   const inputElementRef = useRef<any>(null);
@@ -98,7 +99,11 @@ const Input: React.RefForwardingComponent<InputRef, InputProps> = (
         transform: [{ translateX: interpolated }],
       }}
     >
-      <Container isFocused={isFocused} isErrored={Boolean(error)}>
+      <Container
+        style={containerStyle}
+        isFocused={isFocused}
+        isErrored={Boolean(error)}
+      >
         <Icon
           name={icon}
           size={20}
