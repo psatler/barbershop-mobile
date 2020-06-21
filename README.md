@@ -23,6 +23,34 @@ This will consume the API created at [this repository](https://github.com/psatle
 
 
 
+## How to run
+
+Clone the repo and then install the dependencies. Plug in a cellphone via USB or start a simulator to have the app installed
+
+Below, there is an example for Android
+
+```
+yarn
+npx react-native run-android
+
+npx react-native start
+```
+
+##### Running tests
+
+```
+yarn test
+```
+- Running in watch mode
+
+```
+yarn test --watchAll true
+```
+- To generate the coverage report
+
+```
+yarn test --coverage
+```
 
 ## Dependencies
 
@@ -39,6 +67,7 @@ This will consume the API created at [this repository](https://github.com/psatle
 - [React Native Date Time Picker](https://github.com/react-native-community/datetimepicker) for selecting dates.
 - [Date-fns](https://github.com/date-fns/date-fns): Modern JavaScript date utility library
 - [React Native Image Picker](https://github.com/react-native-community/react-native-image-picker): A React Native module that allows you to use native UI to select media from the device library or directly from the camera.
+- [React Native Testing Library](https://callstack.github.io/react-native-testing-library/) for tests
 <!-- -
 - Polished
 - React Spring -->

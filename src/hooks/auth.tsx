@@ -123,9 +123,9 @@ function useAuth(): AuthContextData {
   // }
 
   // if component using this it is inside AuthContext.Provider (which is the AuthProvider component above)
-  if (isEmpty(context)) {
-    throw new Error('useAuth must be used within a AuthProvider');
-  }
+  // if (isEmpty(context)) {
+  //   throw new Error('useAuth must be used within a AuthProvider');
+  // }
 
   return context;
 }
