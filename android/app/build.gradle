@@ -228,4 +228,9 @@ project.ext.vectoricons = [
   iconFontNames: ['Feather.ttf']
 ]
 
+project.ext.react = [
+        cliPath: "$rootDir/../node_modules/react-native/cli.js",
+        entryFile   : "index.js"
+];
+
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
